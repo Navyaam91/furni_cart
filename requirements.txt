@@ -6,3 +6,5 @@ dj-database-url
 python-decouple
 django-jazzmin
 Pillow
+cloudinary
+django-cloudinary-storage
