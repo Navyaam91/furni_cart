@@ -47,9 +47,9 @@ INSTALLED_APPS = [
     'themes',
 ]
 CLOUDINARY_STORAGE = {
-   'CLOUD_NAME': 'dmtghys2n',
-    'API_KEY': '675474162936152',
-    'API_SECRET': 'D6TsTBwd3zqG6VHZzzDT3JTCTag', # Look for the "API Secret" on your dashboard
+    'CLOUD_NAME': os.environ.get('CLOUDINARY_CLOUD_NAME', 'dmtghys2n'),
+    'API_KEY': os.environ.get('CLOUDINARY_API_KEY', '675474162936152'),
+    'API_SECRET': os.environ.get('CLOUDINARY_API_SECRET'),
 }
 
 MIDDLEWARE = [
