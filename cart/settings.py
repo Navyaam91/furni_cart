@@ -32,31 +32,16 @@ ALLOWED_HOSTS = ['*']  # Update with your Render domain: ['your-app.onrender.com
 
 # Application definition
 
-# INSTALLED_APPS = [
-#     "jazzmin",
-#     'django.contrib.admin',
-#     'django.contrib.auth',
-#     'django.contrib.contenttypes',
-#     'django.contrib.sessions',
-#     'django.contrib.messages',
-#     'django.contrib.staticfiles',
-#     'products',
-#     'cloudinary',
-#     'customers',
-#     'orders',
-#     'themes',
-# ]/
 INSTALLED_APPS = [
     "jazzmin",
-    "cloudinary_storage",  # Must be above staticfiles
-    "cloudinary",          # Must be above staticfiles
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'django.contrib.staticfiles', 
+    'django.contrib.staticfiles',
     'products',
+    'cloudinary',
     'customers',
     'orders',
     'themes',
