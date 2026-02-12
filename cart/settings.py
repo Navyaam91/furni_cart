@@ -34,8 +34,24 @@ ALLOWED_HOSTS = ['*']  # Update with your Render domain: ['your-app.onrender.com
 
 INSTALLED_APPS = [
     "jazzmin",
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    'products',
+    'cloudinary',
+    'cloudinary_storage',
+    'customers',
+    'orders',
+    'themes',
+]
+INSTALLED_APPS = [
+    
     "cloudinary_storage",  # Must be above staticfiles
     "cloudinary",          # Must be above staticfiles
+    "jazzmin",
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -48,11 +64,10 @@ INSTALLED_APPS = [
     'themes',
 ]
 CLOUDINARY_STORAGE = {
-    'CLOUD_NAME': os.environ.get('CLOUDINARY_CLOUD_NAME'),
-    'API_KEY': os.environ.get('CLOUDINARY_API_KEY'),
+    'CLOUD_NAME': os.environ.get('CLOUDINARY_CLOUD_NAME', 'dmtghys2n'),
+    'API_KEY': os.environ.get('CLOUDINARY_API_KEY', '675474162936152'),
     'API_SECRET': os.environ.get('CLOUDINARY_API_SECRET'),
 }
-DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
