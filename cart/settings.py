@@ -13,7 +13,6 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 from pathlib import Path
 import os
 import dj_database_url
-from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -23,10 +22,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = config('SECRET_KEY', default='django-insecure-pths6_(2&xxss269t(=g$p_e9z6)76cx)jen3#tl)jp2)u!zu^')
+SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-pths6_(2&xxss269t(=g$p_e9z6)76cx)jen3#tl)jp2)u!zu^')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = config('DEBUG', default=False, cast=bool)
+DEBUG = os.environ.get('DEBUG', 'False') == 'True'
 
 ALLOWED_HOSTS = ['*']  # Update with your Render domain: ['your-app.onrender.com', 'localhost', '127.0.0.1']
 
@@ -96,7 +95,7 @@ WSGI_APPLICATION = 'cart.wsgi.application'
 # Production database (Neon PostgreSQL)
 DATABASES = {
     'default': dj_database_url.config(
-        default=config('DATABASE_URL', default='postgresql://postgres:12345@localhost:5432/furnicart'),
+        default=os.environ.get('DATABASE_URL', 'postgresql://postgres:12345@localhost:5432/furnicart'),
         conn_max_age=600,
         conn_health_checks=True,
     )
