@@ -41,10 +41,16 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'products',
+    'cloudinary',
     'customers',
     'orders',
     'themes',
 ]
+CLOUDINARY_STORAGE = {
+   'CLOUD_NAME': 'dmtghys2n',
+    'API_KEY': '675474162936152',
+    'API_SECRET': 'D6TsTBwd3zqG6VHZzzDT3JTCTag', # Look for the "API Secret" on your dashboard
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
