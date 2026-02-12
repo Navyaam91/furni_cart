@@ -17,14 +17,15 @@ ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
     "jazzmin",
-    "cloudinary_storage",  # Must be above staticfiles
-    "cloudinary",          
+        
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
-    "django.contrib.staticfiles", # Must be AFTER cloudinary apps
+    "django.contrib.staticfiles",
+    "cloudinary_storage",
+    "cloudinary",  
     "products",
     "customers",
     "orders",
@@ -77,20 +78,24 @@ DATABASES = {
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_DIRS = [BASE_DIR / "static"]
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+# STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # 2. Media Files (User Uploads) - Handled by Cloudinary
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
+# 2. Add this specific Cloudinary setting to ignore static files
 CLOUDINARY_STORAGE = {
     'CLOUD_NAME': os.environ.get('CLOUDINARY_CLOUD_NAME', 'dmtghys2n'),
     'API_KEY': os.environ.get('CLOUDINARY_API_KEY', '675474162936152'),
     'API_SECRET': os.environ.get('CLOUDINARY_API_SECRET'),
 }
 
-# The Bridge: Redirects ImageField uploads to Cloudinary
+# 3. FORCE WhiteNoise to handle static and Cloudinary to handle Media
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+# The Bridge: Redirects ImageField uploads to Cloudinary
+
 
 # --- Security & Extras ---
 
