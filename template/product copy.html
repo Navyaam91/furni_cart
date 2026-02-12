@@ -1,0 +1,84 @@
+{% extends 'blank_layout.html' %}
+{% load static %}
+{% block content %}
+
+<!-- Start Hero Section -->
+<div class="hero">
+    <div class="container">
+        <div class="row justify-content-between">
+            <div class="col-lg-6">
+                <div class="intro-excerpt">
+                    <h1>{{ product.name }}</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Hero Section -->
+
+
+<div class="untree_co-section before-footer-section">
+    <div class="container">
+        <div class="row">
+
+            <!-- Product Image -->
+            <div class="col-12 col-md-6 mb-5">
+                <img src="{{ product.image.url }}" alt="{{ product.name }}" class="img-fluid rounded shadow">
+            </div>
+
+            <!-- Product Details -->
+            <div class="col-12 col-md-6 mb-5">
+                <h2 class="text-black">{{ product.name }}</h2>
+                <p class="mb-4 text-muted">{{ product.short_description }}</p>
+
+                <strong class="text-primary h3 d-block mb-3">₹{{ product.price }}</strong>
+
+                <!-- Quantity Selector -->
+                <div class="mb-4 d-flex align-items-center">
+                    <span class="me-3 fw-bold">Quantity:</span>
+                    <input type="number" value="1" min="1" class="form-control w-25">
+                </div>
+
+                <!-- Add to Cart Button -->
+                <a href="{% url 'add_to_cart' product.id %}" class="btn btn-primary rounded-pill px-4 py-2">
+                    Add to Cart
+                </a>
+
+                <!-- Additional Information -->
+                <div class="mt-4">
+                    <h5>Product Details</h5>
+                    <p>{{ product.description }}</p>
+
+                    <h5 class="mt-4">Specifications</h5>
+                    <ul>
+                        <li>Material: {{ product.material }}</li>
+                        <li>Dimensions: {{ product.dimensions }}</li>
+                        <li>Warranty: {{ product.warranty }}</li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Related Products -->
+        <div class="row mt-5">
+            <h3 class="mb-4">Related Products</h3>
+
+            {% for item in related_products %}
+            <div class="col-12 col-md-4 col-lg-3 mb-4">
+                <a class="product-item" href="{% url 'product_detail' item.id %}">
+                    <img src="{{ item.image.url }}" class="img-fluid product-thumbnail">
+                    <h3 class="product-title">{{ item.name }}</h3>
+                    <strong class="product-price">₹{{ item.price }}</strong>
+                    <span class="icon-cross">
+                        <img src="{% static 'images/cross.svg' %}" class="img-fluid">
+                    </span>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+
+    </div>
+</div>
+
+{% endblock content %}
