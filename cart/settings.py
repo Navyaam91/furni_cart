@@ -98,8 +98,7 @@ cloudinary.config(
     secure=True  # Force HTTPS URLs
 )
 
-# Keep this as is
-DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+
 
 # 3. FORCE WhiteNoise to handle static and Cloudinary to handle Media
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
