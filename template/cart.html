@@ -24,7 +24,7 @@
               <div class="row mb-5">
                 <form class="col-md-12" method="post">
                   <div class="site-blocks-table">
-					{% if cart%}
+					{% if cart and cart.cart_items.exists %}
                     <table class="table">
                       <thead>
                         <tr>
@@ -49,11 +49,26 @@
                           <td>
                             <div class="input-group mb-3 d-flex align-items-center quantity-container" style="max-width: 120px;">
                               <div class="input-group-prepend">
-                                <button class="btn btn-outline-black decrease" type="button">&minus;</button>
+                                <!-- <button class="btn btn-outline-black decrease" type="button">&minus;</button> -->
+                                  <button class="btn btn-outline-black decrease"
+                                        type="button"
+                                        data-id="{{ cart_item.id }}">
+                                    &minus;
+                                  </button>
+
                               </div>
-                              <input type="text" class="form-control text-center quantity-amount" value="{{ cart_item.quantity }}" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1">
+                              <!-- <input type="text" class="form-control text-center quantity-amount" value="{{ cart_item.quantity }}" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1"> -->
+                            <input type="text" class="form-control text-center quantity-amount"  value="{{ cart_item.quantity }}"
+                            data-id="{{ cart_item.id }}">
+
                               <div class="input-group-append">
-                                <button class="btn btn-outline-black increase" type="button">&plus;</button>
+                                <!-- <button class="btn btn-outline-black increase" type="button">&plus;</button> -->
+                                 <button class="btn btn-outline-black increase"
+                                        type="button"
+                                        data-id="{{ cart_item.id }}">
+                                    &plus;
+                                </button>
+
                               </div>
                             </div>
         
@@ -66,8 +81,9 @@
  
                       </tbody>
                     </table>
-					{% endif %}
+					{% else %}
           <p>Cart is Empty</p>
+          {% endif %}
                   </div>
                 </form>
               </div>
@@ -75,11 +91,9 @@
               <div class="row">
                 <div class="col-md-6">
                   <div class="row mb-5">
-                    <div class="col-md-6 mb-3 mb-md-0">
-                      <button class="btn btn-black btn-sm btn-block">Update Cart</button>
-                    </div>
+                    
                     <div class="col-md-6">
-                      <a class="btn btn-outline-black btn-sm btn-block">Continue Shopping</a>
+                      <a class="btn btn-outline-black btn-sm btn-block" href="{% url 'shop' %}">Continue Shopping</a>
                     </div>
                   </div>
                   <!-- <div class="row">
@@ -132,5 +146,8 @@
               </div>
             </div>
           </div>
+{% block extra_js %}
+<script src="{% static 'js/cart_quantity.js' %}"></script>
+{% endblock %}
 
 {% endblock content %}

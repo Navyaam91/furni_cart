@@ -3,6 +3,8 @@ from django.contrib.auth.decorators import login_required
 from products.models import Product
 from .models import Order, OrderItem
 from django.contrib import messages
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
 
 
 # @login_required
@@ -99,3 +101,18 @@ def orders(request):
     # print(all_orders)
     context={'orders':all_orders}
     return render(request,'order.html',context)
+
+@csrf_exempt
+def update_cart_quantity(request):
+    if request.method == "POST":
+        cart_item_id = request.POST.get("cart_item_id")
+        quantity = int(request.POST.get("quantity"))
+
+        cart_item = OrderItem.objects.get(id=cart_item_id)
+        cart_item.quantity = quantity
+        cart_item.save()
+
+        return JsonResponse({
+            "success": True,
+            "total": cart_item.total
+        })
