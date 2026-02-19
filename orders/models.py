@@ -1,6 +1,8 @@
 from django.db import models
 from products.models import Product
 from customers.models import Customer
+
+
 class Order(models.Model):
 
     ORDER_STATUS_CHOICES = [
@@ -11,14 +13,39 @@ class Order(models.Model):
         (4, 'Rejected'),
     ]
 
+    PAYMENT_STATUS_CHOICES = [
+        ('pending', 'Pending'),
+        ('success', 'Success'),
+        ('failed', 'Failed'),
+    ]
+
     owner = models.ForeignKey(Customer, on_delete=models.SET_NULL, null=True, blank=True)
-    order_status = models.PositiveIntegerField(choices=ORDER_STATUS_CHOICES, default=0)
+
+    order_status = models.PositiveIntegerField(
+        choices=ORDER_STATUS_CHOICES,
+        default=0
+    )
+
+
+    razorpay_order_id = models.CharField(max_length=255, blank=True, null=True)
+    razorpay_payment_id = models.CharField(max_length=255, blank=True, null=True)
+    razorpay_signature = models.CharField(max_length=255, blank=True, null=True)
+
+    payment_status = models.CharField(
+        max_length=20,
+        choices=PAYMENT_STATUS_CHOICES,
+        default='pending'
+    )
+
+    amount = models.PositiveBigIntegerField(default=0)  # store in paisa
+
     delete_status = models.BooleanField(default=False)
+
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"Order of {self.owner.firstname if self.owner else 'Unknown'}"
+        return f"Order #{self.id} - {self.owner.firstname if self.owner else 'Guest'}"
 
     @property
     def total_price(self):
