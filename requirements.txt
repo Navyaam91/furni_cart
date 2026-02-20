@@ -8,4 +8,4 @@ django-jazzmin
 Pillow
 cloudinary
 django-cloudinary-storage
-razorpay==1.4.2
+razorpay>=1.4.2
