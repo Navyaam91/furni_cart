@@ -136,7 +136,7 @@
         
                       <div class="row">
                         <div class="col-md-12">
-                          <a href="{% url 'checkout' %}" class="btn btn-black btn-lg py-3 btn-block">Checkout</a>
+                           <a href="{% url 'checkout' cart.id %}"  class="btn btn-black btn-lg py-3 btn-block">Checkout</a>
 
                         </div>
                       </div>
@@ -148,6 +148,49 @@
           </div>
 {% block extra_js %}
 <script src="{% static 'js/cart_quantity.js' %}"></script>
+<button id="rzp-button" class="btn btn-black btn-lg btn-block">
+    Pay Now
+</button>
+
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+<script>
+var options = {
+    "key": "{{ razorpay_key }}",
+    "amount": "{{ amount }}",
+    "currency": "INR",
+    "name": "Your Store",
+    "description": "Order Payment",
+    "order_id": "{{ order.razorpay_order_id }}",
+    "handler": function (response){
+
+        fetch("{% url 'payment_success' %}", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRFToken": "{{ csrf_token }}"
+            },
+            body: JSON.stringify(response)
+        })
+        .then(res => res.json())
+        .then(data => {
+            if(data.status === "success"){
+                window.location.href = "/order-success/";
+            } else {
+                alert("Payment Failed");
+            }
+        });
+    }
+};
+
+var rzp = new Razorpay(options);
+
+document.getElementById('rzp-button').onclick = function(e){
+    rzp.open();
+    e.preventDefault();
+}
+</script>
+
 {% endblock %}
 
 {% endblock content %}
