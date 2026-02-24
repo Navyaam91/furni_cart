@@ -10,8 +10,13 @@ def shop(request):
     categories = Category.objects.all().order_by('-priority')
     
     category_id = request.GET.get('category')
+    search_term = request.GET.get('search')
+    
     if category_id:
         product_list = product_list.filter(category_id=category_id)
+    
+    if search_term:
+        product_list = product_list.filter(name__icontains=search_term)
 
     paginator = Paginator(product_list, 8)  # 8 products per page
     page_number = request.GET.get('page')
@@ -20,7 +25,8 @@ def shop(request):
     return render(request, 'shop.html', {
         'page_obj': page_obj,
         'categories': categories,
-        'selected_category': category_id
+        'selected_category': category_id,
+        'search_term': search_term
     })
 def product(request,pk):
     product=Product.objects.get(pk=pk)

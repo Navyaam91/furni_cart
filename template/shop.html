@@ -50,75 +50,120 @@
 
 <div class="untree_co-section product-section before-footer-section">
 	<div class="container">
-		<!-- Category Filter -->
-		<div class="row mb-5">
-			<div class="col-12 text-center">
-				<a href="{% url 'shop' %}"
-					class="btn btn-sm {% if not selected_category %}btn-black{% else %}btn-outline-black{% endif %} me-2">All</a>
-				{% for cat in categories %}
-				<a href="{% url 'shop' %}?category={{ cat.id }}"
-					class="btn btn-sm {% if selected_category == cat.id|stringformat:'i' %}btn-black{% else %}btn-outline-black{% endif %} me-2">
-					{{ cat.name }}
-				</a>
-				{% endfor %}
-			</div>
-		</div>
-
 		<div class="row">
-			{% for p in page_obj %}
-			<!-- Start Column 1 -->
-			<div class="col-12 col-md-4 col-lg-3 mb-5">
-				<a class="product-item" href="{% url 'product' p.id %}">
-					<img src="{{p.image.url}}" class="img-fluid product-thumbnail">
-					<h3 class="product-title">{{p.name}}</h3>
-					<strong class="product-price">{{p.price}}</strong>
 
-					<span class="icon-cross">
-						<img src="{%  static  'images/cross.svg' %}" class="img-fluid">
-					</span>
-				</a>
+			<!-- LEFT SIDEBAR -->
+			<div class="col-lg-3 mb-5">
+
+				<!-- Search -->
+				<div class="mb-4">
+					<h5 class="mb-3">Search</h5>
+					<form action="{% url 'shop' %}" method="GET">
+
+						<input type="text" name="search" class="form-control mb-3" placeholder="Search products..."
+							value="{{ search_term|default:'' }}">
+
+						{% if selected_category %}
+						<input type="hidden" name="category" value="{{ selected_category }}">
+						{% endif %}
+
+						<div class="d-flex gap-2">
+							<button type="submit" class="btn btn-black btn-sm w-50">
+								Search
+							</button>
+
+							{% if search_term or selected_category %}
+							<a href="{% url 'shop' %}" class="btn btn-outline-black btn-sm w-50">
+								Clear
+							</a>
+							{% endif %}
+						</div>
+
+					</form>
+				</div>
+				<!-- Category Filter -->
+				<div>
+					<h5 class="mb-3">Categories</h5>
+					<div class="d-flex flex-column gap-2">
+						<a href="{% url 'shop' %}"
+							class="btn btn-sm {% if not selected_category %}btn-black{% else %}btn-outline-black{% endif %}">
+							All
+						</a>
+
+						{% for cat in categories %}
+						<a href="{% url 'shop' %}?category={{ cat.id }}"
+							class="btn btn-sm {% if selected_category == cat.id|stringformat:'i' %}btn-black{% else %}btn-outline-black{% endif %}">
+							{{ cat.name }}
+						</a>
+						{% endfor %}
+					</div>
+				</div>
 
 			</div>
-			{% endfor %}
-			<!-- End Column 1 -->
 
+			<!-- RIGHT PRODUCT GRID -->
+			<div class="col-lg-9">
+				<div class="row">
+					{% for p in page_obj %}
+					<div class="col-12 col-md-6 col-lg-4 mb-5">
+						<a class="product-item" href="{% url 'product' p.id %}">
+							<img src="{{p.image.url}}" class="img-fluid product-thumbnail">
+							<h3 class="product-title">{{p.name}}</h3>
+							<strong class="product-price">₹ {{p.price}}</strong>
 
-		</div>
-		<div class="d-flex custom-pagination">
-			<nav>
-				<ul class="pagination">
-
-					{% if page_obj.has_previous %}
-					<li class="page-item">
-						<a class="page-link"
-							href="?page={{ page_obj.previous_page_number }}{% if selected_category %}&category={{ selected_category }}{% endif %}">Previous</a>
-					</li>
-					{% endif %}
-
-					{% for num in page_obj.paginator.page_range %}
-					{% if page_obj.number == num %}
-					<li class="page-item active">
-						<span class="page-link">{{ num }}</span>
-					</li>
-					{% else %}
-					<li class="page-item">
-						<a class="page-link"
-							href="?page={{ num }}{% if selected_category %}&category={{ selected_category }}{% endif %}">{{num}}</a>
-					</li>
-					{% endif %}
+							<span class="icon-cross">
+								<img src="{% static 'images/cross.svg' %}" class="img-fluid">
+							</span>
+						</a>
+					</div>
 					{% endfor %}
+				</div>
 
-					{% if page_obj.has_next %}
-					<li class="page-item">
-						<a class="page-link"
-							href="?page={{ page_obj.next_page_number }}{% if selected_category %}&category={{ selected_category }}{% endif %}">Next</a>
-					</li>
-					{% endif %}
+				<!-- Pagination -->
+				<div class="d-flex custom-pagination">
+					<nav>
+						<ul class="pagination">
 
-				</ul>
-			</nav>
+							{% if page_obj.has_previous %}
+							<li class="page-item">
+								<a class="page-link"
+									href="?page={{ page_obj.previous_page_number }}{% if selected_category %}&category={{ selected_category }}{% endif %}{% if search_term %}&search={{ search_term }}{% endif %}">
+									Previous
+								</a>
+							</li>
+							{% endif %}
+
+							{% for num in page_obj.paginator.page_range %}
+							{% if page_obj.number == num %}
+							<li class="page-item active">
+								<span class="page-link">{{ num }}</span>
+							</li>
+							{% else %}
+							<li class="page-item">
+								<a class="page-link"
+									href="?page={{ num }}{% if selected_category %}&category={{ selected_category }}{% endif %}{% if search_term %}&search={{ search_term }}{% endif %}">
+									{{num}}
+								</a>
+							</li>
+							{% endif %}
+							{% endfor %}
+
+							{% if page_obj.has_next %}
+							<li class="page-item">
+								<a class="page-link"
+									href="?page={{ page_obj.next_page_number }}{% if selected_category %}&category={{ selected_category }}{% endif %}{% if search_term %}&search={{ search_term }}{% endif %}">
+									Next
+								</a>
+							</li>
+							{% endif %}
+
+						</ul>
+					</nav>
+				</div>
+
+			</div>
+
 		</div>
-
 	</div>
 </div>
 
