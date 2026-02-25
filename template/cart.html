@@ -110,11 +110,7 @@
                     </div>
                   </div>
 
-                  <div class="row">
-                    <div class="col-md-12">
-                      <a href="{% url 'checkout' cart.id %}" class="btn btn-black btn-lg py-3 btn-block">Checkout</a>
-                    </div>
-                  </div>
+
                 </div>
               </div>
             </div>
@@ -133,6 +129,13 @@
           {% endif %}
         </div>
       </form>
+      <div class="row">
+        <div class="col-md-12 d-flex justify-content-end">
+          <a href="{% url 'checkout' cart.id %}" class="btn btn-black btn-lg py-3">
+            Checkout
+          </a>
+        </div>
+      </div>
     </div>
   </div>
 </div>
