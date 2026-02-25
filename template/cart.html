@@ -22,9 +22,10 @@
 <div class="untree_co-section before-footer-section">
   <div class="container">
     <div class="row mb-5">
+      {% if cart and cart.cart_items.exists %}
       <form class="col-md-12" method="post">
         <div class="site-blocks-table">
-          {% if cart and cart.cart_items.exists %}
+
           <table class="table">
             <thead>
               <tr>
@@ -115,27 +116,30 @@
               </div>
             </div>
           </div>
-          {% else %}
-          <p>Cart is Empty</p>
-          <div class="row">
-            <div class="col-md-6">
-              <div class="row mb-5">
-                <div class="col-md-6">
-                  <a class="btn btn-outline-black btn-sm btn-block" href="{% url 'shop' %}">Continue Shopping</a>
-                </div>
-              </div>
-            </div>
+
+        </div>
+        <div class="row">
+          <div class="col-md-12 d-flex justify-content-end">
+            <a href="{% url 'checkout' cart.id %}" class="btn btn-black btn-lg py-3">
+              Checkout
+            </a>
           </div>
-          {% endif %}
         </div>
       </form>
+
+      {% else %}
+      <p>Cart is Empty</p>
       <div class="row">
-        <div class="col-md-12 d-flex justify-content-end">
-          <a href="{% url 'checkout' cart.id %}" class="btn btn-black btn-lg py-3">
-            Checkout
-          </a>
+        <div class="col-md-6">
+          <div class="row mb-5">
+            <div class="col-md-6">
+              <a class="btn btn-outline-black btn-sm btn-block" href="{% url 'shop' %}">Continue Shopping</a>
+            </div>
+          </div>
         </div>
       </div>
+      {% endif %}
+
     </div>
   </div>
 </div>
