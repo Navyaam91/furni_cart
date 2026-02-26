@@ -26,7 +26,7 @@ def dashboard(request):
         return redirect('shop')
     
     customer = request.user.customer
-    products = Product.objects.filter(seller=customer)
+    products = Product.objects.filter(seller=customer, deleted_at=Product.LIVE)
     total_products = products.count()
     
     # Simple order fetching for items belonging to this seller
@@ -45,7 +45,7 @@ def product_list(request):
     if not is_seller_check(request.user):
         return redirect('shop')
     
-    products = Product.objects.filter(seller=request.user.customer).order_by('-created_at')
+    products = Product.objects.filter(seller=request.user.customer, deleted_at=Product.LIVE).order_by('-created_at')
     return render(request, 'sellers/product_manage.html', {'products': products})
 
 @login_required
@@ -132,3 +132,46 @@ def payment_list(request):
         order.amount_in_rupees = order.amount / 100.0
         
     return render(request, 'sellers/payment_list.html', {'orders': orders})
+
+@login_required
+def edit_product(request, pk):
+    if not is_seller_check(request.user):
+        return redirect('shop')
+    
+    product = get_object_or_404(Product, pk=pk, seller=request.user.customer)
+    
+    if request.method == "POST":
+        product.name = request.POST.get('name')
+        product.description = request.POST.get('description')
+        product.price = request.POST.get('price')
+        product.stock = request.POST.get('stock')
+        category_id = request.POST.get('category')
+        
+        category = get_object_or_404(Category, id=category_id)
+        product.category = category
+        
+        image = request.FILES.get('image')
+        if image:
+            product.image = image
+            
+        product.save()
+        messages.success(request, "Product updated successfully!")
+        return redirect('seller_product_list')
+    
+    categories = Category.objects.all()
+    context = {
+        'product': product,
+        'categories': categories
+    }
+    return render(request, 'sellers/edit_product.html', context)
+
+@login_required
+def delete_product(request, pk):
+    if not is_seller_check(request.user):
+        return redirect('shop')
+    
+    product = get_object_or_404(Product, pk=pk, seller=request.user.customer)
+    product.deleted_at = Product.DELETE
+    product.save()
+    messages.success(request, "Product deleted successfully!")
+    return redirect('seller_product_list')

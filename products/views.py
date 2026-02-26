@@ -2,11 +2,11 @@ from django.shortcuts import render,redirect
 from . models import Product, Category
 from django.core.paginator import Paginator
 def index(request):
-    product_list=Product.objects.order_by('-priority')[:3]
+    product_list=Product.objects.filter(deleted_at=Product.LIVE).order_by('-priority')[:3]
     return render(request, 'index.html',{'product_list':product_list})
 
 def shop(request):
-    product_list = Product.objects.all().order_by('-priority')
+    product_list = Product.objects.filter(deleted_at=Product.LIVE).order_by('-priority')
     categories = Category.objects.all().order_by('-priority')
     
     category_id = request.GET.get('category')
@@ -29,5 +29,5 @@ def shop(request):
         'search_term': search_term
     })
 def product(request,pk):
-    product=Product.objects.get(pk=pk)
+    product=Product.objects.get(pk=pk, deleted_at=Product.LIVE)
     return render(request, 'product.html',{'product':product})
