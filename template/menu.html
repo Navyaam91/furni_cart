@@ -39,6 +39,11 @@
 					</a>
 					<ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
 						<li><a class="dropdown-item" href="/orders">Orders</a></li>
+						{% if user.customer.is_seller %}
+						<li><a class="dropdown-item" href="{% url 'seller_dashboard' %}">Seller Dashboard</a></li>
+						{% else %}
+						<li><a class="dropdown-item" href="{% url 'become_seller' %}">Become a Seller</a></li>
+						{% endif %}
 						<li>
 							<hr class="dropdown-divider">
 						</li>

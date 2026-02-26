@@ -12,6 +12,7 @@ class Customer(models.Model):
     country = models.CharField(max_length=100)
     phone = models.CharField(max_length=15, blank=True, null=True)
 
+    is_seller = models.BooleanField(default=False)
     delete_status = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
 

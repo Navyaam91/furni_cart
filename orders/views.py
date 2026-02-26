@@ -109,6 +109,8 @@ def checkout(request, order_id):
     amount = int(order.total_price * 100)
 
     # Initialize Razorpay client
+    print(settings.RAZORPAY_KEY_ID)
+    print(settings.RAZORPAY_KEY_SECRET)
     client = razorpay.Client(auth=(
         settings.RAZORPAY_KEY_ID,
         settings.RAZORPAY_KEY_SECRET
@@ -188,7 +190,7 @@ def payment_success(request):
 
             order.razorpay_payment_id = data['razorpay_payment_id']
             order.razorpay_signature = data['razorpay_signature']
-            order.payment_status = "Success"
+            order.payment_status = "success"
             order.order_status = 1  # Confirmed
             order.save()
 

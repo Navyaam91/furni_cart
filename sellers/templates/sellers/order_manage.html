@@ -1,0 +1,66 @@
+{% extends 'blank_layout.html' %}
+{% load static %}
+
+{% block content %}
+<div class="hero">
+    <div class="container">
+        <h1>Order Management</h1>
+    </div>
+</div>
+
+<div class="untree_co-section before-footer-section">
+    <div class="container">
+        <h2>Items to Fulfill</h2>
+        <table class="table mt-4">
+            <thead>
+                <tr>
+                    <th>Order #</th>
+                    <th>Product</th>
+                    <th>Qty</th>
+                    <th>Total</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in order_items %}
+                <tr>
+                    <td>{{ item.owner.id }}</td>
+                    <td>{{ item.product.name }}</td>
+                    <td>{{ item.quantity }}</td>
+                    <td>&#8377; {{ item.total }}</td>
+                    <td>
+                        <span class="badge
+                            {% if item.owner.order_status == 1 %}bg-primary
+                            {% elif item.owner.order_status == 2 %}bg-warning
+                            {% elif item.owner.order_status == 3 %}bg-success
+                            {% else %}bg-secondary{% endif %}">
+                            {{ item.owner.get_order_status_display }}
+                        </span>
+                    </td>
+                    <td>
+                        <form action="{% url 'seller_update_order_status' item.id %}" method="POST"
+                            class="d-flex gap-2">
+                            {% csrf_token %}
+                            <select name="status" class="form-select form-select-sm" style="width: auto;">
+                                <option value="2" {% if item.owner.order_status == 2 %}selected{% endif %}>Processed
+                                </option>
+                                <option value="3" {% if item.owner.order_status == 3 %}selected{% endif %}>Delivered
+                                </option>
+                                <option value="4" {% if item.owner.order_status == 4 %}selected{% endif %}>Rejected
+                                </option>
+                            </select>
+                            <button type="submit" class="btn btn-black btn-sm">Update</button>
+                        </form>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" class="text-center">No orders found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

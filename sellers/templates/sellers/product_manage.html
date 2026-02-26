@@ -1,0 +1,56 @@
+{% extends 'blank_layout.html' %}
+{% load static %}
+
+{% block content %}
+<div class="hero">
+    <div class="container">
+        <h1>Manage Products</h1>
+    </div>
+</div>
+
+<div class="untree_co-section product-section before-footer-section">
+    <div class="container">
+        <div class="d-flex justify-content-between mb-4">
+            <h2>Your Products</h2>
+            <a href="{% url 'seller_add_product' %}" class="btn btn-black">Add New Product</a>
+        </div>
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Image</th>
+                    <th>Name</th>
+                    <th>Price</th>
+                    <th>Stock</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for p in products %}
+                <tr>
+                    <td><img src="{{ p.image.url }}" width="60"></td>
+                    <td>{{ p.name }}</td>
+                    <td>₹ {{ p.price }}</td>
+                    <td>
+                        <form action="{% url 'seller_update_stock' p.id %}" method="POST"
+                            class="d-flex align-items-center">
+                            {% csrf_token %}
+                            <input type="number" name="stock" value="{{ p.stock }}" class="form-control me-2"
+                                style="width: 80px;">
+                            <button type="submit" class="btn btn-black btn-sm">Update</button>
+                        </form>
+                    </td>
+                    <td>
+                        <a href="{% url 'product' p.id %}" class="btn btn-outline-black btn-sm">View</a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" class="text-center">No products added yet.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

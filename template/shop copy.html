@@ -1,0 +1,165 @@
+{% extends 'blank_layout.html' %}
+{% load static %}
+{% block content %}
+<style>
+	.custom-pagination .page-link {
+		color: #3b5d50;
+		border-radius: 8px;
+		margin: 0 5px;
+		border: 1px solid #3b5d50;
+		padding: 8px 14px;
+		font-weight: 600;
+	}
+
+	.custom-pagination .page-item.active .page-link {
+		background-color: #3b5d50;
+		color: #fff;
+		border-color: #3b5d50;
+	}
+
+	.custom-pagination .page-link:hover {
+		background-color: #3b5d50;
+		color: white;
+		border-color: #3b5d50;
+	}
+
+	.custom-pagination {
+		justify-content: center;
+		margin-top: 30px;
+	}
+</style>
+
+<!-- Start Hero Section -->
+<div class="hero">
+	<div class="container">
+		<div class="row justify-content-between">
+			<div class="col-lg-5">
+				<div class="intro-excerpt">
+					<h1>Shop</h1>
+				</div>
+			</div>
+			<div class="col-lg-7">
+
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+
+<div class="untree_co-section product-section before-footer-section">
+	<div class="container">
+		<div class="row">
+
+			<!-- LEFT SIDEBAR -->
+			<div class="col-lg-3 mb-5">
+
+				<!-- Search -->
+				<div class="mb-4">
+					<h5 class="mb-3">Search</h5>
+					<form action="{% url 'shop' %}" method="GET">
+						<input type="text" name="search" class="form-control mb-2" placeholder="Search products..."
+							value="{{ search_term|default:'' }}">
+
+						{% if selected_category %}
+						<input type="hidden" name="category" value="{{ selected_category }}">
+						{% endif %}
+
+						<button type="submit" class="btn btn-black w-100">Search</button>
+
+						{% if search_term or selected_category %}
+						<a href="{% url 'shop' %}" class="btn btn-outline-black w-100 mt-2">Clear</a>
+						{% endif %}
+					</form>
+				</div>
+
+				<!-- Category Filter -->
+				<div>
+					<h5 class="mb-3">Categories</h5>
+					<div class="d-flex flex-column gap-2">
+						<a href="{% url 'shop' %}"
+							class="btn btn-sm {% if not selected_category %}btn-black{% else %}btn-outline-black{% endif %}">
+							All
+						</a>
+
+						{% for cat in categories %}
+						<a href="{% url 'shop' %}?category={{ cat.id }}"
+							class="btn btn-sm {% if selected_category == cat.id|stringformat:'i' %}btn-black{% else %}btn-outline-black{% endif %}">
+							{{ cat.name }}
+						</a>
+						{% endfor %}
+					</div>
+				</div>
+
+			</div>
+
+			<!-- RIGHT PRODUCT GRID -->
+			<div class="col-lg-9">
+				<div class="row">
+					{% for p in page_obj %}
+					<div class="col-12 col-md-6 col-lg-4 mb-5">
+						<a class="product-item" href="{% url 'product' p.id %}">
+							<img src="{{p.image.url}}" class="img-fluid product-thumbnail">
+							<h3 class="product-title">{{p.name}}</h3>
+							<strong class="product-price">₹ {{p.price}}</strong>
+
+							<span class="icon-cross">
+								<img src="{% static 'images/cross.svg' %}" class="img-fluid">
+							</span>
+						</a>
+					</div>
+					{% endfor %}
+				</div>
+
+				<!-- Pagination -->
+				<div class="d-flex custom-pagination">
+					<nav>
+						<ul class="pagination">
+
+							{% if page_obj.has_previous %}
+							<li class="page-item">
+								<a class="page-link"
+									href="?page={{ page_obj.previous_page_number }}{% if selected_category %}&category={{ selected_category }}{% endif %}{% if search_term %}&search={{ search_term }}{% endif %}">
+									Previous
+								</a>
+							</li>
+							{% endif %}
+
+							{% for num in page_obj.paginator.page_range %}
+							{% if page_obj.number == num %}
+							<li class="page-item active">
+								<span class="page-link">{{ num }}</span>
+							</li>
+							{% else %}
+							<li class="page-item">
+								<a class="page-link"
+									href="?page={{ num }}{% if selected_category %}&category={{ selected_category }}{% endif %}{% if search_term %}&search={{ search_term }}{% endif %}">
+									{{num}}
+								</a>
+							</li>
+							{% endif %}
+							{% endfor %}
+
+							{% if page_obj.has_next %}
+							<li class="page-item">
+								<a class="page-link"
+									href="?page={{ page_obj.next_page_number }}{% if selected_category %}&category={{ selected_category }}{% endif %}{% if search_term %}&search={{ search_term }}{% endif %}">
+									Next
+								</a>
+							</li>
+							{% endif %}
+
+						</ul>
+					</nav>
+				</div>
+
+			</div>
+
+		</div>
+	</div>
+</div>
+
+
+
+{% endblock content %}

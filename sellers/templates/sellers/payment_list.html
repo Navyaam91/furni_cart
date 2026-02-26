@@ -1,0 +1,42 @@
+{% extends 'blank_layout.html' %}
+{% load static %}
+
+{% block content %}
+<div class="hero">
+    <div class="container">
+        <h1>Payment Earnings</h1>
+    </div>
+</div>
+
+<div class="untree_co-section before-footer-section">
+    <div class="container">
+        <h2 class="mb-4">Recent Successful Payments</h2>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Order #</th>
+                    <th>Customer</th>
+                    <th>Amount Paid</th>
+                    <th>Date</th>
+                    <th>Payment ID</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for order in orders %}
+                <tr>
+                    <td>{{ order.id }}</td>
+                    <td>{{ order.owner.firstname }} {{ order.owner.lastname }}</td>
+                    <td>₹ {{ order.amount_in_rupees }}</td>
+                    <td>{{ order.updated_at|date:"M d, Y" }}</td>
+                    <td><small>{{ order.razorpay_payment_id }}</small></td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" class="text-center">No recorded payments for your products yet.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
