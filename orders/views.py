@@ -29,6 +29,15 @@ def add_to_cart(request):
 
         product = Product.objects.get(id=product_id)
 
+        # Stock check
+        if product.stock < qty:
+            messages.warning(request, f"Sorry, only {product.stock} items left in stock.")
+            return redirect(request.META.get('HTTP_REFERER', 'shop'))
+
+        if product.stock == 0:
+            messages.warning(request, "Sorry, this product is out of stock.")
+            return redirect(request.META.get('HTTP_REFERER', 'shop'))
+
         # Cart object
         cart_obj, created = Order.objects.get_or_create(
             owner=customer,
@@ -45,10 +54,15 @@ def add_to_cart(request):
             order_item.quantity=qty
            
         else:
+            # Also check if existing quantity + new quantity exceeds stock
+            if product.stock < (order_item.quantity + qty):
+                messages.warning(request, f"Sorry, you already have {order_item.quantity} in cart and only {product.stock} are available.")
+                return redirect("cart")
             order_item.quantity=order_item.quantity+qty
 
         order_item.save()
         return redirect("cart")
+
 
 
 @login_required
@@ -194,7 +208,14 @@ def payment_success(request):
             order.order_status = 1  # Confirmed
             order.save()
 
+            # Decrement stock
+            for item in order.cart_items.all():
+                product = item.product
+                product.stock -= item.quantity
+                product.save()
+
             return JsonResponse({"status": "success"})
+
 
         except Exception as e:
             print("Payment Error:", str(e))

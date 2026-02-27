@@ -106,16 +106,24 @@
 				<div class="row">
 					{% for p in page_obj %}
 					<div class="col-12 col-md-6 col-lg-4 mb-5">
-						<a class="product-item" href="{% url 'product' p.id %}">
+						<a class="product-item" {% if p.stock > 0 %}href="{% url 'product' p.id %}"{% else %}href="javascript:void(0)" style="opacity: 0.6; cursor: not-allowed;"{% endif %}>
 							<img src="{{p.image.url}}" class="img-fluid product-thumbnail">
 							<h3 class="product-title">{{p.name}}</h3>
 							<strong class="product-price">₹ {{p.price}}</strong>
+							{% if p.stock == 0 %}
+								<span class="d-block badge bg-danger mb-2">Out of Stock</span>
+							{% endif %}
 
 							<span class="icon-cross">
-								<img src="{% static 'images/cross.svg' %}" class="img-fluid">
+								{% if p.stock > 0 %}
+									<img src="{% static 'images/cross.svg' %}" class="img-fluid">
+								{% else %}
+									<i class="fa fa-ban" style="color: white; font-size: 14px;"></i>
+								{% endif %}
 							</span>
 						</a>
 					</div>
+
 					{% endfor %}
 				</div>
 
