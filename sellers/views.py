@@ -1,4 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.models import User
+from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
 from django.contrib.auth.decorators import login_required
 from customers.models import Customer
 from products.models import Product, Category
@@ -18,6 +20,64 @@ def become_seller(request):
         return redirect('seller_dashboard')
     messages.error(request, "Customer profile not found.")
     return redirect('shop')
+
+def seller_signup(request):
+    if request.method == "POST":
+        fname = request.POST.get("fname")
+        lname = request.POST.get("lname")
+        email = request.POST.get("email")
+        password = request.POST.get("password")
+        phone = request.POST.get("phone")
+        address = request.POST.get("address")
+        
+        if User.objects.filter(username=email).exists():
+            messages.error(request, "Email already registered!")
+            return redirect('seller_signup')
+
+        user = User.objects.create_user(
+            username=email,
+            email=email,
+            password=password
+        )
+
+        Customer.objects.create(
+            user=user,
+            firstname=fname,
+            lastname=lname,
+            phone=phone,
+            address=address,
+            is_seller=True
+        )
+        
+        messages.success(request, "Seller account created successfully! Please login.")
+        return redirect('seller_login')
+
+    return render(request, 'sellers/signup.html')
+
+def seller_login(request):
+    if request.method == "POST":
+        email = request.POST.get("email")
+        password = request.POST.get("password")
+
+        user = authenticate(request, username=email, password=password)
+
+        if user is not None:
+            if hasattr(user, 'customer') and user.customer.is_seller:
+                auth_login(request, user)
+                messages.success(request, "Welcome to your Dashboard!")
+                return redirect('seller_dashboard')
+            else:
+                messages.error(request, "This account is not registered as a seller.")
+                return redirect('seller_login')
+        else:
+            messages.error(request, "Invalid credentials!")
+            return redirect('seller_login')
+
+    return render(request, 'sellers/login.html')
+
+def seller_logout(request):
+    auth_logout(request)
+    return redirect('seller_login')
 
 @login_required
 def dashboard(request):

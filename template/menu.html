@@ -41,19 +41,20 @@
 						<li><a class="dropdown-item" href="/orders">Orders</a></li>
 						{% if user.customer.is_seller %}
 						<li><a class="dropdown-item" href="{% url 'seller_dashboard' %}">Seller Dashboard</a></li>
+						<li><a class="dropdown-item text-danger" href="{% url 'seller_logout' %}">Seller Logout</a></li>
 						{% else %}
 						<li><a class="dropdown-item" href="{% url 'become_seller' %}">Become a Seller</a></li>
-						{% endif %}
-						<li>
-							<hr class="dropdown-divider">
-						</li>
 						<li><a class="dropdown-item text-danger" href="/logout">Logout</a></li>
+						{% endif %}
 					</ul>
 				</li>
 				{% else %}
 				<!-- Show for non-logged-in users -->
 				<li class="nav-item">
-					<a href="/login" class="nav-link">Login</a>
+					<a href="/login" class="nav-link">User Login</a>
+				</li>
+				<li class="nav-item">
+					<a href="{% url 'seller_login' %}" class="nav-link">Seller Login</a>
 				</li>
 				{% endif %}
 			</ul>

@@ -1,0 +1,88 @@
+{% extends 'blank_layout.html' %}
+{% load static %}
+{% block content %}
+
+<div class="hero">
+    <div class="container">
+        <h1 class="text-center mb-4">Seller Registration</h1>
+        <p class="text-center mb-5">Join our platform as a seller and start managing your products.</p>
+
+        <div class="row justify-content-center">
+            <div class="col-md-7 col-lg-5 card">
+                <div class="card-body">
+                    {% if messages %}
+                    <div>
+                        {% for message in messages %}
+                        <p class="alert alert-warning" style="color:black">{{ message }}</p>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                    <form method="POST">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col-md-12 mb-5 mb-md-0">
+                                <div class="p-3 p-lg-5 border bg-white">
+                                    <div class="form-group row">
+                                        <div class="col-md-6">
+                                            <label for="fname" class="text-black">First Name <span
+                                                    class="text-danger">*</span></label>
+                                            <input type="text" class="form-control" id="fname" name="fname" required>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="lname" class="text-black">Last Name <span
+                                                    class="text-danger">*</span></label>
+                                            <input type="text" class="form-control" id="lname" name="lname" required>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <div class="col-md-12">
+                                            <label for="email" class="text-black">Email / Username <span
+                                                    class="text-danger">*</span></label>
+                                            <input type="email" class="form-control" id="email" name="email" required
+                                                placeholder="example@email.com">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <div class="col-md-12">
+                                            <label for="password" class="text-black">Password <span
+                                                    class="text-danger">*</span></label>
+                                            <input type="password" class="form-control" id="password" name="password"
+                                                required placeholder="Choose a strong password">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <div class="col-md-12">
+                                            <label for="phone" class="text-black">Phone Number <span
+                                                    class="text-danger">*</span></label>
+                                            <input type="text" class="form-control" id="phone" name="phone" required
+                                                placeholder="Your contact number">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row mb-5">
+                                        <div class="col-md-12">
+                                            <label for="address" class="text-black">Shop Address <span
+                                                    class="text-danger">*</span></label>
+                                            <textarea class="form-control" id="address" name="address" required
+                                                placeholder="Your business or shop address" rows="3"></textarea>
+                                        </div>
+                                    </div>
+
+                                    <button type="submit" class="btn btn-primary w-100">Register as Seller</button>
+                                    <p class="text-center mt-3 text-black">
+                                        Already have a seller account? <a href="{% url 'seller_login' %}">Login here</a>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
