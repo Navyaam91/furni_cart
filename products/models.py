@@ -29,3 +29,12 @@ class Product(models.Model):
     def __str__(self):
         return self.name
 
+class Review(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='reviews')
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
+    rating = models.PositiveIntegerField(default=5)
+    comment = models.TextField(blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.customer.firstname} - {self.product.name} - {self.rating}"
