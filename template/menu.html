@@ -23,6 +23,7 @@
 
 			<ul class="custom-navbar-cta navbar-nav mb-2 mb-md-0 ms-5">
 				<li><a class="nav-link" href="#"><img src="{%  static  'images/user.svg' %}"></a></li>
+				{% if not user.customer.is_seller or not user.is_authenticated %}
 				<li><a class="nav-link" href="{% url 'cart' %}">
 						<img src="{%  static  'images/cart.svg' %}">
 						{% if cart_count > 0 %}
@@ -30,6 +31,7 @@
 							style="font-size: 0.6rem; vertical-align: top; margin-left: -10px;">{{ cart_count }}</span>
 						{% endif %}
 					</a></li>
+				{% endif %}
 				{% if user.is_authenticated %}
 				<!-- Dropdown for logged-in user -->
 				<li class="nav-item dropdown">
@@ -43,7 +45,7 @@
 						<li><a class="dropdown-item" href="{% url 'seller_dashboard' %}">Seller Dashboard</a></li>
 						<li><a class="dropdown-item text-danger" href="{% url 'seller_logout' %}">Seller Logout</a></li>
 						{% else %}
-						<li><a class="dropdown-item" href="{% url 'become_seller' %}">Become a Seller</a></li>
+						<!-- <li><a class="dropdown-item" href="{% url 'become_seller' %}">Become a Seller</a></li> -->
 						<li><a class="dropdown-item text-danger" href="/logout">Logout</a></li>
 						{% endif %}
 					</ul>
