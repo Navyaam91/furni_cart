@@ -11,7 +11,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-pths6_(2&xxss269t(=g$
 
 # SECURITY WARNING: don't run with debug turned on in production!
 # DEBUG = os.environ.get('DJANGO_DEBUG', 'False') == 'True'
-DEBUG = 'True'
+DEBUG = os.environ.get("DJANGO_DEBUG", "False") == "True"
 
 ALLOWED_HOSTS = ['*'] 
 
@@ -88,27 +88,21 @@ STATICFILES_DIRS = [BASE_DIR / "static"]
 # STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # 2. Media Files (User Uploads) - Handled by Cloudinary
-MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+# MEDIA_URL = '/media/'
+# MEDIA_ROOT = BASE_DIR / 'media'
 
-# 2. Add this specific Cloudinary setting to ignore static files
-# CLOUDINARY_STORAGE = {
-#     'CLOUD_NAME': os.environ.get('CLOUDINARY_CLOUD_NAME', 'dmtghys2n'),
-#     'API_KEY': os.environ.get('CLOUDINARY_API_KEY', '675474162936152'),
-#     'API_SECRET': os.environ.get('CLOUDINARY_API_SECRET'),
-# }
 cloudinary.config(
-    cloud_name=os.environ.get('CLOUDINARY_CLOUD_NAME', 'dmtghys2n'),
-    api_key=os.environ.get('CLOUDINARY_API_KEY', '675474162936152'),
-    api_secret=os.environ.get('CLOUDINARY_API_SECRET'),
-    secure=True  # Force HTTPS URLs
+    cloud_name=os.environ.get("CLOUDINARY_CLOUD_NAME"),
+    api_key=os.environ.get("CLOUDINARY_API_KEY"),
+    api_secret=os.environ.get("CLOUDINARY_API_SECRET"),
+    secure=True
 )
 
 
 
 # 3. FORCE WhiteNoise to handle static and Cloudinary to handle Media
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+DEFAULT_FILE_STORAGE = "cloudinary_storage.storage.MediaCloudinaryStorage"
 # The Bridge: Redirects ImageField uploads to Cloudinary
 
 
