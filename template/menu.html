@@ -41,7 +41,9 @@
 						Hello, <strong>{{ user.username }}</strong>
 					</a>
 					<ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+						{% if not user.customer.is_seller or not user.is_authenticated %}
 						<li><a class="dropdown-item" href="/orders">Orders</a></li>
+						{% endif %}
 						{% if user.customer.is_seller %}
 						<li><a class="dropdown-item" href="{% url 'seller_dashboard' %}">Seller Dashboard</a></li>
 						<li><a class="dropdown-item text-danger" href="{% url 'seller_logout' %}">Seller Logout</a></li>
