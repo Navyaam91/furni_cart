@@ -6,6 +6,7 @@ from customers.models import Customer
 from products.models import Product, Category
 from orders.models import Order, OrderItem
 from django.contrib import messages
+from cart.utils import validate_password
 
 def is_seller_check(user):
     return hasattr(user, 'customer') and user.customer.is_seller
@@ -32,6 +33,12 @@ def seller_signup(request):
         
         if User.objects.filter(username=email).exists():
             messages.error(request, "Email already registered!")
+            return redirect('seller_signup')
+
+        # Password validation
+        is_valid, error_message = validate_password(password)
+        if not is_valid:
+            messages.error(request, error_message)
             return redirect('seller_signup')
 
         user = User.objects.create_user(

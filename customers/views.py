@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login as auth_login,logout as auth_logout
 from django.contrib import messages
 from . models import Customer,Contact
+from cart.utils import validate_password
 
 def signup(request):
     if request.method == "POST":
@@ -18,6 +19,12 @@ def signup(request):
         # email is already registered
         if User.objects.filter(username=email).exists():
             messages.error(request, "User already exists with this email!")
+            return redirect('signup')
+
+        # Password validation
+        is_valid, error_message = validate_password(password)
+        if not is_valid:
+            messages.error(request, error_message)
             return redirect('signup')
 
         # AUTO HASHES PASSWORD
