@@ -11,14 +11,15 @@
 
 		<div class="collapse navbar-collapse" id="navbarsFurni">
 			<ul class="custom-navbar-nav navbar-nav ms-auto mb-2 mb-md-0">
+				{% if not user.customer.is_seller or not user.is_authenticated %}
 				<li class="nav-item active">
 					<a class="nav-link" href="{% url 'home' %}">Home</a>
 				</li>
 				<li><a class="nav-link" href="{% url 'shop' %}">Shop</a></li>
 				<li><a class="nav-link" href="{% url 'about' %}">About us</a></li>
-
+				{% endif %}
 				<li><a class="nav-link" href="{% url 'contactus' %}">Contact us</a></li>
-
+				{% endif %}
 			</ul>
 
 			<ul class="custom-navbar-cta navbar-nav mb-2 mb-md-0 ms-5">
